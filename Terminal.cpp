@@ -6,8 +6,10 @@
 #include <chrono>
 #include <algorithm>
 #include <cctype>
+#include <cstdlib>
 #include "Terminal.h"
 #include "Cesare.h"
+#include "Matrix.h"
 
 using namespace std;
 
@@ -82,15 +84,11 @@ int domanda(
     }
 }
 
-void primoEnigma(Terminal& terminal, const string& nome) {
-
-    string soluzione = "orientamentoiltagliamento";
-    string tentativo;
-
+void testoPrimoEnigma(Terminal& terminal, const string& nome) {
     terminal.write(
         "Bene, " + nome + ".\n"
         "Il primo rompicapo ti aspetta.\n"
-        "Gli hacker hanno lasciato un messaggio cifrato.\n"
+        "Gli hack-a-ton ci costringono a decodificare una stringa esadecimale.\n"
         "Fortunatamente, abbiamo recuperato una tabella ASCII.\n"
         "Potrebbe tornarti utile...\n"
     );
@@ -130,7 +128,7 @@ void primoEnigma(Terminal& terminal, const string& nome) {
         "79      y\n"
         "7A      z\n",
         5,
-        50
+        25
     );
 
     terminal.newLine(2);
@@ -144,6 +142,14 @@ void primoEnigma(Terminal& terminal, const string& nome) {
     );
 
     terminal.newLine(3);
+}
+
+void primoEnigma(Terminal& terminal, const string& nome) {
+
+    string soluzione = "orientamentoaltagliamento";
+    string tentativo;
+
+    testoPrimoEnigma(terminal, nome);
 
     while (true) {
 
@@ -153,12 +159,15 @@ void primoEnigma(Terminal& terminal, const string& nome) {
         terminal.write("> ");
         getline(cin, tentativo);
 
+        if (tentativo == "ripeti")
+            testoPrimoEnigma(terminal, nome);
+
         if (tentativo == soluzione) {
 
             terminal.newLine(2);
 
             terminal.write(
-                "ACCESSO CONSENTITO.\n"
+                "SUCCESS\n"
             );
 
             break;
@@ -169,14 +178,44 @@ void primoEnigma(Terminal& terminal, const string& nome) {
             terminal.newLine(2);
 
             terminal.write(
-                "ACCESSO NEGATO\n"
+                "STRINGA ERRATA.\n"
             );
 
-            terminal.newLine(2);
         }
     }
 }
 
+void testoSecondoEnigma(Terminal& terminal, const string& nome) {
+    terminal.write(
+        "Complimenti, " + nome + "!\n"
+        "Abbiamo intercettato un altro messaggio.\n"
+        "Questa volta sembra essere stato cifrato con un algoritmo diverso!\n"
+    );
+
+    terminal.newLine(2);
+
+    terminal.write("MESSAGGIO INTERCETTATO:");
+    terminal.newLine(2);
+
+    terminal.write("             cscdowklemkdy");
+
+    terminal.newLine(3);
+
+    terminal.write("Fortunatamente, il nostro team di controhackeraggio e' riuscito a recuperare l'algoritmo di cifratura.\n"
+        "Le sue caratteristiche non sono note (purtroppo e' un file binario incomprensibile...),\n"
+        "ma questo ci permette di capire le regole dell'algoritmo andando a tentativi");
+
+    terminal.newLine(2);
+
+    terminal.write(
+        "Riesci a capire cosa nasconde?\n\n"
+        "Hai un numero illimitato di tentativi.\n"
+        "Se ti trovi in difficolta', puoi chiedere\n"
+        "un suggerimento scrivendo SUGGERIMENTO.\n"
+    );
+
+    terminal.newLine(3);
+}
 
 void secondoEnigma(Terminal& terminal, const string& nome) {
 
@@ -205,49 +244,15 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
     };
 
     const vector<int> tempiSuggerimenti = {
-        /*2 * 60,
+        2 * 60,
         7 * 60,
-        20 * 60*/
-        10,
-        15,
-        20
+        20 * 60
     };
 
     int prossimoSuggerimento = 0;
 
-    terminal.write(
-        "========================================\n"
-        "             SECONDO ENIGMA\n"
-        "========================================\n\n"
-        "Bene, " + nome + ".\n"
-        "Abbiamo intercettato un altro messaggio.\n"
-        "Questa volta sembra essere stato cifrato con un algoritmo diverso!\n"
-    );
-
-    terminal.newLine(2);
-
-    terminal.write("MESSAGGIO INTERCETTATO:");
-    terminal.newLine(2);
-
-    terminal.write("             cscdowklemkdy");
-
-    terminal.newLine(3);
-
-    terminal.write("Fortunatamente, il nostro team di controhackeraggio e' riuscito a recuperare l'algoritmo di cifratura.\n"
-        "Le sue caratteristiche non sono note (purtroppo e' un file binario incomprensibile...),\n"
-        "ma questo ci permette di capire le regole dell'algoritmo andando a tentativi");
-
-    terminal.newLine(2);
-
-    terminal.write(
-        "Riesci a capire cosa nasconde?\n\n"
-        "Hai un numero illimitato di tentativi.\n"
-        "Se ti trovi in difficolta', puoi chiedere\n"
-        "un suggerimento scrivendo SUGGERIMENTO.\n"
-    );
-
-    terminal.newLine(3);
-
+    testoSecondoEnigma(terminal, nome);
+    
     while (true) {
 
         terminal.write("Inserisci la soluzione:");
@@ -267,6 +272,10 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
                 rispostaNormalizzata +=
                     static_cast<char>(tolower(c));
             }
+        }
+
+        if (rispostaNormalizzata == "ripeti") {
+            testoSecondoEnigma(terminal, nome);
         }
 
         // Richiesta di un suggerimento
@@ -395,16 +404,19 @@ int main() {
 
     terminal.clear();
 
+    
+    terminal.newLine(45);
+
     terminal.write(
-        "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton.\n"
-        "Non possiamo fare altro che utilizzare il computer in questa maniera.\n"
+        "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
+        "Hanno infettato i nostri sistemi con un trojan che ci costringe ad utilizzare il computer in questa maniera.\n"
         "Schermo nero e caratteri squadrati..."
     );
 
     terminal.newLine(2);
 
     terminal.write("Come ti chiami?");
-    terminal.newLine();
+    terminal.newLine(2);
 
     terminal.write("> ");
     getline(cin, nome);
@@ -412,9 +424,8 @@ int main() {
     terminal.newLine(2);
 
     
-    terminal.write("Ciao " + nome +"!. \nIl gruppo hacker hack - a - ton ha lasciato due rompicapi da risolvere\n"
-                "per riottenere il controllo del computer.\n"
-                "ti consigliamo di avere sotto mano carta e penna, ti serviranno!");
+    terminal.write("Ciao " + nome +"! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi da risolvere per riottenere il controllo del computer.\n"
+                "Ti consigliamo di avere sotto mano carta e penna, ti serviranno!");
     
     terminal.newLine(2);
 
@@ -428,12 +439,85 @@ int main() {
 
     primoEnigma(terminal, nome);
 
-    secondoEnigma(terminal, nome);
-
     terminal.write("Complimenti " + nome + "!\n"
-        "Grazie al tuo aiuto siamo riusciti a recuperare il computer!\n"
-        "A presto!\n"
+        "Hai risolto il primo enigma, pasiamo al secondo!"
     );
+
+    terminal.newLine(2);
+
+    secondoEnigma(terminal, nome);
+    
+
+    terminal.write("Grande " + nome + "\nHai risolto anche il secondo enigma! " + nome + "!\n"
+        "Grazie al tuo aiuto siamo riusciti a recuperare il computer!\n"
+        "Ora rilassati e goditi questa animazione in stile Matrix, ciao!\n"
+    );
+
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    float clear_probability = 0.8f;
+    float spawn_probability = 0.2f;
+    int space_interval = 1;
+
+    int HEIGHT = 70;
+    int WIDTH = 200;
+    Matrix m(200, 70);
+
+    int n_iter = 0;
+
+    while (true) {
+
+        // Check keyboard input without blocking
+        if (_kbhit()) {
+            int key = _getch();
+
+            if (key == 224) {
+                key = _getch();
+
+                if (key == 72) { // UP
+                    clear_probability += 0.03f;
+                }
+                else if (key == 80) { // DOWN
+                    clear_probability -= 0.03f;
+                }
+                else if (key == 77) { // RIGHT
+                    spawn_probability += 0.03f;
+                }
+                else if (key == 75) { // LEFT
+                    spawn_probability -= 0.03f;
+                }
+                else if (key == 'x') {
+                    space_interval += 1;
+                }
+                else if (key == 'z') {
+                    space_interval = space_interval >= 0 ? space_interval - 1 : 0;
+                }
+
+                clear_probability = std::clamp(clear_probability, 0.0f, 1.0f);
+                spawn_probability = std::clamp(spawn_probability, 0.0f, 1.0f);
+            }
+        }
+
+        float dice = (rand() % 1001) / 1000.0f;
+        int h = rand() % HEIGHT;
+        int w = rand() % WIDTH;
+
+        if (dice < clear_probability) {
+            m.set(w, h, ' ');
+            m.set(w, h + space_interval, ' ');
+            m.set(w, h - space_interval, ' ');
+            m.set(w + space_interval, h, ' ');
+            m.set(w - space_interval, h, ' ');
+        }
+
+        if (dice < spawn_probability) {
+            char c = rand() % 255;
+            m.set(w, h, c);
+        }
+
+        m.set(0, 0, n_iter);
+        n_iter++;
+    }
 
     return 0;
 }

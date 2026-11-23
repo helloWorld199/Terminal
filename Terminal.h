@@ -18,6 +18,16 @@ public:
 
     Terminal()
         : console(GetStdHandle(STD_OUTPUT_HANDLE)), cursor() {
+        CONSOLE_SCREEN_BUFFER_INFO info;
+
+        if (!GetConsoleScreenBufferInfo(console, &info))
+            return;
+
+        COORD newSize = info.dwSize;
+
+        newSize.Y = (SHORT)30000;
+
+        SetConsoleScreenBufferSize(console, newSize);
     }
 
     // Synchronize the Windows console cursor with our Cursor
@@ -28,6 +38,7 @@ public:
         };
 
         SetConsoleCursorPosition(console, pos);
+
     }
 
     void moveTo(int x, int y) {
@@ -106,6 +117,7 @@ public:
         }
     }
 
+
     void scrollIfNeeded() {
 
         CONSOLE_SCREEN_BUFFER_INFO info;
@@ -113,32 +125,33 @@ public:
         if (!GetConsoleScreenBufferInfo(console, &info))
             return;
 
-        // Keep the cursor inside the console buffer.
-        if (cursor.y >= info.dwSize.Y) {
+        // The cursor is still inside the buffer.
+        if (cursor.y < info.dwSize.Y)
+            return;
 
-            SMALL_RECT scrollRect = {
-                0,
-                1,
-                (SHORT)(info.dwSize.X - 1),
-                (SHORT)(info.dwSize.Y - 1)
-            };
+        SMALL_RECT scrollRect = {
+            0,
+            1,
+            (SHORT)(info.dwSize.X - 1),
+            (SHORT)(info.dwSize.Y - 1)
+        };
 
-            CHAR_INFO fill = {};
-            fill.Char.UnicodeChar = L' ';
-            fill.Attributes = info.wAttributes;
+        CHAR_INFO fill = {};
+        fill.Char.UnicodeChar = L' ';
+        fill.Attributes = info.wAttributes;
 
-            COORD destination = { 0, 0 };
+        COORD destination = { 0, 0 };
 
-            ScrollConsoleScreenBufferW(
-                console,
-                &scrollRect,
-                nullptr,
-                destination,
-                &fill
-            );
-
+        if (ScrollConsoleScreenBufferW(
+            console,
+            &scrollRect,
+            nullptr,
+            destination,
+            &fill
+        )) {
             cursor.y = info.dwSize.Y - 1;
         }
     }
+    
 
 };

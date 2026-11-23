@@ -35,27 +35,27 @@ public:
         update();
     }
 
-    void write(char c) {
+    void write(char c, int wait_ms) {
         update();
         std::cout << c << std::flush;
         cursor.advance();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        std::this_thread::sleep_for(std::chrono::milliseconds(wait_ms));
     }
 
-    void write(const std::string& text) {
+    void write(const std::string& text, int wait_ms = 30, int wait_ms_newline = 300) {
         for (char c : text) {
             if (c == '\n') {
-                newLine();
+                newLine(1, wait_ms_newline);
             }
             else {
-                write(c);
+                write(c, wait_ms);
             }
         }
     }
 
-    void newLine(int lines = 1) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(300));
+    void newLine(int lines = 1, int wait_ms_newline = 300) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(wait_ms_newline));
 
         cursor.newLine(lines);
 

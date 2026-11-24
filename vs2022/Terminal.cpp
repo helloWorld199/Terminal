@@ -106,18 +106,18 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
     terminal.newLine(2);
 
     terminal.write(
-        "HEX     CARATTERE\n"
-        "------------------\n"
-        "61      a\n"
-        "62      b\n"
-        "63      c\n"
-        "64      d\n"
-        "65      e\n"
-        "66      f\n"
-        "67      g\n"
-        "68      h\n"
-        "69      i\n"
-        "6A      j\n"
+        "HEX     CARATTERE       HEX     CARATTERE\n"
+        "-----------------------------------------\n"
+        "61      a               30      0\n"
+        "62      b               31      1\n"
+        "63      c               32      2\n"
+        "64      d               33      3\n"
+        "65      e               34      4\n"
+        "66      f               35      5\n"
+        "67      g               36      6\n"
+        "68      h               37      7\n"
+        "69      i               38      8\n"
+        "6A      j               39      9\n"
         "6B      k\n"
         "6C      l\n"
         "6D      m\n"
@@ -134,8 +134,8 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
         "78      x\n"
         "79      y\n"
         "7A      z\n",
-        5,
-        25
+        2,
+        15
     );
 
     terminal.newLine(2);
@@ -145,7 +145,7 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
 
     terminal.write(
         "6F 72 69 65 6E 74 61 6D 65 6E 74 6F "
-        "69 6C 74 61 67 6C 69 61 6D 65 6E 74 6F"
+        "69 6C 74 61 67 6C 69 61 6D 65 6E 74 6F 32 36 32 37"
     );
 
     terminal.newLine(3);
@@ -153,7 +153,7 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
 
 void primoEnigma(Terminal& terminal, const string& nome) {
 
-    string soluzione = "orientamentoaltagliamento";
+    string soluzione = "orientamentoaltagliamento2627";
     string tentativo;
 
     testoPrimoEnigma(terminal, nome);
@@ -283,6 +283,7 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
 
         if (rispostaNormalizzata == "ripeti") {
             testoSecondoEnigma(terminal, nome);
+            continue;
         }
 
         // Richiesta di un suggerimento
@@ -404,6 +405,7 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
 int main() {
 
     string nome = "pippo";
+    /*
 
     Terminal terminal;
 
@@ -411,8 +413,14 @@ int main() {
 
     terminal.clear();
 
-    
-    terminal.newLine(45);
+    terminal.write("Premi INVIO per iniziare");
+
+    char tasto = _getch();
+    while (tasto != 13) {
+        tasto = _getch();
+    }
+
+    terminal.clear();
 
     terminal.write(
         "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
@@ -431,7 +439,7 @@ int main() {
     terminal.newLine(2);
 
     
-    terminal.write("Ciao " + nome +"! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi da risolvere per riottenere il controllo del computer.\n"
+    terminal.write("Ciao " + nome +"! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi per riottenere il controllo del computer.\n"
                 "Ti consigliamo di avere sotto mano carta e penna, ti serviranno!");
     
     terminal.newLine(2);
@@ -447,7 +455,7 @@ int main() {
     primoEnigma(terminal, nome);
 
     terminal.write("Complimenti " + nome + "!\n"
-        "Hai risolto il primo enigma, pasiamo al secondo!"
+        "Hai risolto il primo enigma, passiamo al secondo!"
     );
 
     terminal.newLine(2);
@@ -461,16 +469,17 @@ int main() {
     );
 
     std::this_thread::sleep_for(std::chrono::seconds(2));
+    */
 
     float clear_probability = 0.8f;
     float spawn_probability = 0.2f;
     int space_interval = 1;
+    float red_p = 0.33f;
+    float green_p = 0.66f;
 
-    int HEIGHT = 70;
-    int WIDTH = 200;
-    Matrix m(200, 70);
-
-    int n_iter = 0;
+    int HEIGHT = 50;
+    int WIDTH = 130;
+    Matrix m(WIDTH, HEIGHT);
 
     while (true) {
 
@@ -499,13 +508,29 @@ int main() {
                 else if (key == 'z') {
                     space_interval = space_interval >= 0 ? space_interval - 1 : 0;
                 }
+                else if (key == 'g') {
+                    green_p += 0.03f;
+                }
+                else if (key == 'f') {
+                    green_p -= 0.03f;
+                }
+                else if (key == 'r') {
+                    red_p += 0.03f;
+                }
+                else if (key == 'e') {
+                    red_p -= 0.03f;
+                }
 
                 clear_probability = clamp(clear_probability, 0.0f, 1.0f);
                 spawn_probability = clamp(spawn_probability, 0.0f, 1.0f);
+                green_p = clamp(green_p, 0.0f, 1.0f);
+                red_p = clamp(red_p, 0.0f, 1.0f);
+                
             }
         }
 
         float dice = (rand() % 1001) / 1000.0f;
+        float dice_color = (rand() % 1001) / 1000.0f;
         int h = rand() % HEIGHT;
         int w = rand() % WIDTH;
 
@@ -517,13 +542,25 @@ int main() {
             m.set(w - space_interval, h, ' ');
         }
 
+        auto color = FOREGROUND_RED;
+
         if (dice < spawn_probability) {
             char c = rand() % 255;
-            m.set(w, h, c);
+            if (dice_color < red_p)
+                color = FOREGROUND_RED;
+            else if (dice_color < green_p)
+                color = FOREGROUND_GREEN;
+            else
+                color = FOREGROUND_BLUE;
+            m.set(w, h, c, color);
         }
 
-        m.set(0, 0, n_iter);
-        n_iter++;
+        char buffer[100];
+        sprintf_s(buffer, "Rosso Number = %f\n", red_p);
+        sprintf_s(buffer, "Verde Number = %f\n", green_p);
+
+
+        OutputDebugStringA(buffer);
     }
 
     return 0;

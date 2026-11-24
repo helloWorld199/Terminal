@@ -54,7 +54,7 @@ public:
         std::this_thread::sleep_for(std::chrono::milliseconds(wait_ms));
     }
 
-    void write(const std::string& text, int wait_ms = 30, int wait_ms_newline = 300) {
+    void write(const std::string& text, int wait_ms = 15, int wait_ms_newline = 200) {
         for (char c : text) {
             if (c == '\n') {
                 newLine(1, wait_ms_newline);
@@ -65,7 +65,7 @@ public:
         }
     }
 
-    void newLine(int lines = 1, int wait_ms_newline = 300) {
+    void newLine(int lines = 1, int wait_ms_newline = 200) {
         std::this_thread::sleep_for(std::chrono::milliseconds(wait_ms_newline));
 
         cursor.newLine(lines);

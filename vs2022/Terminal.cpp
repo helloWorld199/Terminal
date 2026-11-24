@@ -463,7 +463,7 @@ int main() {
     secondoEnigma(terminal, nome);
     
 
-    terminal.write("Grande " + nome + "\nHai risolto anche il secondo enigma! " + nome + "!\n"
+    terminal.write("Grande " + nome + "\nHai risolto anche il secondo enigma!\n"
         "Grazie al tuo aiuto siamo riusciti a recuperare il computer!\n"
         "Ora rilassati e goditi questa animazione in stile Matrix, ciao!\n"
     );

@@ -396,16 +396,22 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
 
 int main() {
 
-    string nome = "pippo";
+    string nome = "davide";
 
     Terminal terminal;
 
     terminal.fullScreen();
 
     terminal.clear();
+    /*
+    terminal.write("Premi INVIO per iniziare");
 
-    
-    terminal.newLine(45);
+    char tasto = _getch();
+    while (tasto != 13) {
+        tasto = _getch();
+    }
+
+    terminal.clear();
 
     terminal.write(
         "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
@@ -424,7 +430,7 @@ int main() {
     terminal.newLine(2);
 
     
-    terminal.write("Ciao " + nome +"! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi da risolvere per riottenere il controllo del computer.\n"
+    terminal.write("Ciao " + nome +"! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi da risolvere per riottenere il controllo \"normale\" del computer.\n"
                 "Ti consigliamo di avere sotto mano carta e penna, ti serviranno!");
     
     terminal.newLine(2);
@@ -432,9 +438,14 @@ int main() {
     int risposta = domanda(
         terminal,
         nome,
-        "Sei pronto?",
+        "Sei pronta/o?",
         { "Si", "No", "Ermh... cosa... devo fare?" }
     );
+
+    if (risposta == 2) {
+        terminal.newLine();
+        terminal.write("non hai capito n cazz");
+    }
 
 
     primoEnigma(terminal, nome);
@@ -455,17 +466,33 @@ int main() {
 
     std::this_thread::sleep_for(std::chrono::seconds(2));
 
+    */
     float clear_probability = 0.8f;
     float spawn_probability = 0.2f;
     int space_interval = 1;
 
-    int HEIGHT = 70;
-    int WIDTH = 200;
-    Matrix m(200, 70);
-
-    int n_iter = 0;
+    int HEIGHT = 40;
+    int WIDTH = 140;
+    Matrix m(WIDTH, HEIGHT);
 
     while (true) {
+
+        // Stampa "IIS Il Tagliamento"
+
+        int x = 30, y = 10;
+        std::string iis = "IIS Il Tagliamento";
+        for (char c : iis) {
+            m.set(x++, y, c, FOREGROUND_RED);
+        }
+
+        x = 50; y = 20;
+        std::string dev_by = "Sviluppato da Davide Rizzotti";
+        for (int i = 0; i < dev_by.length(); i++) {
+            if (i%3==0)
+                m.set(x++, y++, dev_by[i], FOREGROUND_RED);
+            else
+                m.set(x++, y, dev_by[i], FOREGROUND_RED);
+        }
 
         // Check keyboard input without blocking
         if (_kbhit()) {
@@ -515,8 +542,6 @@ int main() {
             m.set(w, h, c);
         }
 
-        m.set(0, 0, n_iter);
-        n_iter++;
     }
 
     return 0;

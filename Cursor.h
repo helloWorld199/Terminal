@@ -27,6 +27,10 @@ public:
         y -= lines;
     }
 
+    void back(int columns = 1) {
+        x -= columns;
+    }
+
     void advance(int columns = 1) {
         x += columns;
     }

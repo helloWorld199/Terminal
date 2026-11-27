@@ -4,7 +4,7 @@
 #include <vector>
 #include <conio.h>
 #include <chrono>
-#include <algorithm>
+//#include <algorithm>
 #include <cctype>
 #include <cstdlib>
 #include "Terminal.h"
@@ -405,7 +405,7 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
 int main() {
 
     string nome = "pippo";
-    /*
+    
 
     Terminal terminal;
 
@@ -469,7 +469,7 @@ int main() {
     );
 
     std::this_thread::sleep_for(std::chrono::seconds(2));
-    */
+    
 
     float clear_probability = 0.8f;
     float spawn_probability = 0.2f;

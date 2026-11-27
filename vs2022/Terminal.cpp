@@ -11,6 +11,9 @@
 #include "Cesare.h"
 #include "Matrix.h"
 
+#define ENIGMA_1_SOL "scuoleaperte2627"
+#define ENIGMA_2_SOL "chiavedecifrata"
+
 using namespace std;
 
 template <typename T>
@@ -18,8 +21,6 @@ constexpr const T& clamp(const T& value, const T& min, const T& max)
 {
     return value < min ? min : (value > max ? max : value);
 }
-
-
 
 int domanda(
     Terminal& terminal,
@@ -144,8 +145,8 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
     terminal.newLine(2);
 
     terminal.write(
-        "6F 72 69 65 6E 74 61 6D 65 6E 74 6F "
-        "69 6C 74 61 67 6C 69 61 6D 65 6E 74 6F 32 36 32 37"
+        "73 63 75 6F 6C 65 61 70 65 72 74 65 "
+        "32 36 32 37"
     );
 
     terminal.newLine(3);
@@ -153,7 +154,6 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
 
 void primoEnigma(Terminal& terminal, const string& nome) {
 
-    string soluzione = "orientamentoaltagliamento2627";
     string tentativo;
 
     testoPrimoEnigma(terminal, nome);
@@ -169,7 +169,7 @@ void primoEnigma(Terminal& terminal, const string& nome) {
         if (tentativo == "ripeti")
             testoPrimoEnigma(terminal, nome);
 
-        if (tentativo == soluzione) {
+        if (tentativo == ENIGMA_1_SOL) {
 
             terminal.newLine(2);
 
@@ -194,29 +194,20 @@ void primoEnigma(Terminal& terminal, const string& nome) {
 
 void testoSecondoEnigma(Terminal& terminal, const string& nome) {
     terminal.write(
-        "Complimenti, " + nome + "!\n"
-        "Abbiamo intercettato un altro messaggio.\n"
-        "Questa volta sembra essere stato cifrato con un algoritmo diverso!\n"
+        "Questa volta dobbiamo capire cosa si cela dietro questa sequenza di testo:\n"
     );
-
     terminal.newLine(2);
 
-    terminal.write("MESSAGGIO INTERCETTATO:");
-    terminal.newLine(2);
-
-    terminal.write("             cscdowklemkdy");
+    terminal.write("             " + cypher(ENIGMA_2_SOL));
 
     terminal.newLine(3);
 
-    terminal.write("Fortunatamente, il nostro team di controhackeraggio e' riuscito a recuperare l'algoritmo di cifratura.\n"
-        "Le sue caratteristiche non sono note (purtroppo e' un file binario incomprensibile...),\n"
-        "ma questo ci permette di capire le regole dell'algoritmo andando a tentativi");
+    terminal.write("Sappiamo solo che la sequenza originale e' stata modificata secondo una regola precisa.\nSta a te scoprire"
+    " come andando a tentativi inserendo stringhe nel cifratore.");
 
     terminal.newLine(2);
 
     terminal.write(
-        "Riesci a capire cosa nasconde?\n\n"
-        "Hai un numero illimitato di tentativi.\n"
         "Se ti trovi in difficolta', puoi chiedere\n"
         "un suggerimento scrivendo SUGGERIMENTO.\n"
     );
@@ -230,9 +221,6 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
 
     // Timer dell'enigma
     auto inizio = steady_clock::now();
-
-    // Soluzione
-    const string soluzione = "sistemabucato";
 
     string tentativo;
 
@@ -283,7 +271,6 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
 
         if (rispostaNormalizzata == "ripeti") {
             testoSecondoEnigma(terminal, nome);
-            continue;
         }
 
         // Richiesta di un suggerimento
@@ -369,7 +356,7 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
         
 
         // Controllo della soluzione
-        if (rispostaNormalizzata == soluzione) {
+        if (rispostaNormalizzata == ENIGMA_2_SOL) {
 
             terminal.newLine(2);
 
@@ -404,84 +391,114 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
 
 int main() {
 
-    string nome = "pippo";
-    
+    string nome = "davide";
 
     Terminal terminal;
 
     terminal.fullScreen();
 
     terminal.clear();
+    
+    terminal.write("Premi INVIO per iniziare, o skippa ai crediti con E");
 
-    terminal.write("Premi INVIO per iniziare");
-
-    char tasto = _getch();
-    while (tasto != 13) {
+    bool play = true;
+    char tasto;
+    do {
         tasto = _getch();
-    }
+    } while (tasto != 13 && tasto != 'e'); // 13 invio, 27 esc
+
+    if (tasto == 'e')
+        play = false;
 
     terminal.clear();
 
-    terminal.write(
-        "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
-        "Hanno infettato i nostri sistemi con un trojan che ci costringe ad utilizzare il computer in questa maniera.\n"
-        "Schermo nero e caratteri squadrati..."
-    );
+    if (play) {
+        /*
+        terminal.write(
+            "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
+            "Hanno infettato i nostri sistemi con un trojan che ci costringe ad utilizzare il computer in questa maniera.\n"
+            "Schermo nero e caratteri squadrati..."
+        );
 
-    terminal.newLine(2);
+        terminal.newLine(2);
 
-    terminal.write("Come ti chiami?");
-    terminal.newLine(2);
+        terminal.write("Come ti chiami?");
+        terminal.newLine(2);
 
-    terminal.write("> ");
-    getline(cin, nome);
+        terminal.write("> ");
+        getline(cin, nome);
 
-    terminal.newLine(2);
+        terminal.newLine(2);
 
+
+        terminal.write("Ciao " + nome + "! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi da risolvere per riottenere il controllo \"normale\" del computer.\n"
+            "Ti consigliamo di avere sotto mano carta e penna, ti serviranno!");
+
+        terminal.newLine(2);
+
+        int risposta = domanda(
+            terminal,
+            nome,
+            "Sei pronta/o?",
+            { "Si", "No", "Ermh... cosa... devo fare?" }
+        );
+        /*
+        if(risposta==1){}
+
+        if (risposta == 2) {
+            terminal.newLine();
+            terminal.write("Solo provare a rispondere ad un paio di domande");
+        }
+        
+
+        primoEnigma(terminal, nome);
+
+        terminal.write("Complimenti " + nome + "!\n"
+            "Hai risolto il primo enigma, passiamo al secondo!"
+        );
+
+        terminal.newLine(2);
+
+        */
+        secondoEnigma(terminal, nome);
+
+
+        terminal.write("Grande " + nome + "\nHai risolto anche il secondo enigma!\n"
+            "Grazie al tuo aiuto siamo riusciti a recuperare il computer!\n"
+            "Ora rilassati e goditi questa animazione in stile Matrix, ciao!\n"
+        );
+
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
     
-    terminal.write("Ciao " + nome +"! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi per riottenere il controllo del computer.\n"
-                "Ti consigliamo di avere sotto mano carta e penna, ti serviranno!");
+    // Credits
     
-    terminal.newLine(2);
-
-    int risposta = domanda(
-        terminal,
-        nome,
-        "Sei pronto?",
-        { "Si", "No", "Ermh... cosa... devo fare?" }
-    );
-
-
-    primoEnigma(terminal, nome);
-
-    terminal.write("Complimenti " + nome + "!\n"
-        "Hai risolto il primo enigma, passiamo al secondo!"
-    );
-
-    terminal.newLine(2);
-
-    secondoEnigma(terminal, nome);
-    
-
-    terminal.write("Grande " + nome + "\nHai risolto anche il secondo enigma!\n"
-        "Grazie al tuo aiuto siamo riusciti a recuperare il computer!\n"
-        "Ora rilassati e goditi questa animazione in stile Matrix, ciao!\n"
-    );
-
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    
-
     float clear_probability = 0.8f;
     float spawn_probability = 0.2f;
     int space_interval = 1;
-    float red_p = 0.33f;
-    float green_p = 0.66f;
 
-    int HEIGHT = 50;
-    int WIDTH = 130;
+    int HEIGHT = 40;
+    int WIDTH = 140;
     Matrix m(WIDTH, HEIGHT);
 
     while (true) {
+
+        // Stampa "IIS Il Tagliamento"
+
+        int x = 30, y = 10;
+        std::string iis = "IIS Il Tagliamento";
+        for (char c : iis) {
+            m.set(x++, y, c, FOREGROUND_RED);
+        }
+
+        x = 50; y = 20;
+        std::string dev_by = "Sviluppato da Davide Rizzotti";
+        for (int i = 0; i < dev_by.length(); i++) {
+            if (i%3==0)
+                m.set(x++, y++, dev_by[i], FOREGROUND_RED);
+            else
+                m.set(x++, y, dev_by[i], FOREGROUND_RED);
+        }
 
         // Check keyboard input without blocking
         if (_kbhit()) {
@@ -508,29 +525,13 @@ int main() {
                 else if (key == 'z') {
                     space_interval = space_interval >= 0 ? space_interval - 1 : 0;
                 }
-                else if (key == 'g') {
-                    green_p += 0.03f;
-                }
-                else if (key == 'f') {
-                    green_p -= 0.03f;
-                }
-                else if (key == 'r') {
-                    red_p += 0.03f;
-                }
-                else if (key == 'e') {
-                    red_p -= 0.03f;
-                }
 
-                clear_probability = clamp(clear_probability, 0.0f, 1.0f);
-                spawn_probability = clamp(spawn_probability, 0.0f, 1.0f);
-                green_p = clamp(green_p, 0.0f, 1.0f);
-                red_p = clamp(red_p, 0.0f, 1.0f);
-                
+                clear_probability = std::clamp(clear_probability, 0.0f, 1.0f);
+                spawn_probability = std::clamp(spawn_probability, 0.0f, 1.0f);
             }
         }
 
         float dice = (rand() % 1001) / 1000.0f;
-        float dice_color = (rand() % 1001) / 1000.0f;
         int h = rand() % HEIGHT;
         int w = rand() % WIDTH;
 
@@ -542,25 +543,11 @@ int main() {
             m.set(w - space_interval, h, ' ');
         }
 
-        auto color = FOREGROUND_RED;
-
         if (dice < spawn_probability) {
             char c = rand() % 255;
-            if (dice_color < red_p)
-                color = FOREGROUND_RED;
-            else if (dice_color < green_p)
-                color = FOREGROUND_GREEN;
-            else
-                color = FOREGROUND_BLUE;
-            m.set(w, h, c, color);
+            m.set(w, h, c);
         }
 
-        char buffer[100];
-        sprintf_s(buffer, "Rosso Number = %f\n", red_p);
-        sprintf_s(buffer, "Verde Number = %f\n", green_p);
-
-
-        OutputDebugStringA(buffer);
     }
 
     return 0;

@@ -197,7 +197,7 @@ void testoSecondoEnigma(Terminal& terminal, const string& nome) {
     terminal.newLine(3);
 
     terminal.write("Sappiamo solo che la sequenza originale e' stata modificata secondo una regola precisa.\nSta a te scoprire"
-    "come andando a tentativi inserendo stringhe nel cifratore.");
+    " come andando a tentativi inserendo stringhe nel cifratore.");
 
     terminal.newLine(2);
 

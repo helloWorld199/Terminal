@@ -407,7 +407,7 @@ int main() {
     terminal.clear();
 
     if (play) {
-        /*
+        
         terminal.write(
             "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
             "Hanno infettato i nostri sistemi con un trojan che ci costringe ad utilizzare il computer in questa maniera.\n"
@@ -442,7 +442,7 @@ int main() {
         if (risposta == 2) {
             terminal.newLine();
             terminal.write("Solo provare a rispondere ad un paio di domande");
-        }
+        }*/
         
 
         primoEnigma(terminal, nome);
@@ -453,7 +453,7 @@ int main() {
 
         terminal.newLine(2);
 
-        */
+        
         secondoEnigma(terminal, nome);
 
 

@@ -13,6 +13,8 @@
 
 using namespace std;
 
+#define ENIGMA_1_SOL "scuoleaperte2627"
+#define ENIGMA_2_SOL "chiavedecifrata"
 
 int domanda(
     Terminal& terminal,
@@ -146,7 +148,6 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
 
 void primoEnigma(Terminal& terminal, const string& nome) {
 
-    string soluzione = "scuoleaperte2627";
     string tentativo;
 
     testoPrimoEnigma(terminal, nome);
@@ -162,7 +163,7 @@ void primoEnigma(Terminal& terminal, const string& nome) {
         if (tentativo == "ripeti")
             testoPrimoEnigma(terminal, nome);
 
-        if (tentativo == soluzione) {
+        if (tentativo == ENIGMA_1_SOL) {
 
             terminal.newLine(2);
 
@@ -187,28 +188,20 @@ void primoEnigma(Terminal& terminal, const string& nome) {
 
 void testoSecondoEnigma(Terminal& terminal, const string& nome) {
     terminal.write(
-        "Abbiamo intercettato un altro messaggio.\n"
-        "Questa volta sembra essere stato cifrato con un algoritmo diverso!\n"
+        "Questa volta dobbiamo capire cosa si cela dietro questa sequenza di testo:\n"
     );
-
     terminal.newLine(2);
 
-    terminal.write("MESSAGGIO INTERCETTATO:");
-    terminal.newLine(2);
-
-    terminal.write("             cscdowklemkdy");
+    terminal.write("             " + cypher(ENIGMA_2_SOL));
 
     terminal.newLine(3);
 
-    terminal.write("Fortunatamente, il nostro team di controhackeraggio e' riuscito a recuperare l'algoritmo di cifratura.\n"
-        "Le sue caratteristiche non sono note (purtroppo e' un file binario incomprensibile...),\n"
-        "ma questo ci permette di capire le regole dell'algoritmo andando a tentativi");
+    terminal.write("Sappiamo solo che la sequenza originale e' stata modificata secondo una regola precisa.\nSta a te scoprire"
+    "come andando a tentativi inserendo stringhe nel cifratore.");
 
     terminal.newLine(2);
 
     terminal.write(
-        "Riesci a capire cosa nasconde?\n\n"
-        "Hai un numero illimitato di tentativi.\n"
         "Se ti trovi in difficolta', puoi chiedere\n"
         "un suggerimento scrivendo SUGGERIMENTO.\n"
     );
@@ -222,9 +215,6 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
 
     // Timer dell'enigma
     auto inizio = steady_clock::now();
-
-    // Soluzione
-    const string soluzione = "sistemabucato";
 
     string tentativo;
 
@@ -360,7 +350,7 @@ void secondoEnigma(Terminal& terminal, const string& nome) {
         
 
         // Controllo della soluzione
-        if (rispostaNormalizzata == soluzione) {
+        if (rispostaNormalizzata == ENIGMA_2_SOL) {
 
             terminal.newLine(2);
 
@@ -417,6 +407,7 @@ int main() {
     terminal.clear();
 
     if (play) {
+        /*
         terminal.write(
             "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
             "Hanno infettato i nostri sistemi con un trojan che ci costringe ad utilizzare il computer in questa maniera.\n"
@@ -445,26 +436,24 @@ int main() {
             "Sei pronta/o?",
             { "Si", "No", "Ermh... cosa... devo fare?" }
         );
-
         /*
-        if (risposta == 1) {
-
-        }
+        if(risposta==1){}
 
         if (risposta == 2) {
             terminal.newLine();
             terminal.write("Solo provare a rispondere ad un paio di domande");
         }
-        */
+        
 
         primoEnigma(terminal, nome);
 
         terminal.write("Complimenti " + nome + "!\n"
-            "Hai risolto il primo enigma, pasiamo al secondo!"
+            "Hai risolto il primo enigma, passiamo al secondo!"
         );
 
         terminal.newLine(2);
 
+        */
         secondoEnigma(terminal, nome);
 
 

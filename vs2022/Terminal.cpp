@@ -413,7 +413,7 @@ int main() {
     terminal.clear();
 
     if (play) {
-        /*
+        
         terminal.write(
             "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
             "Hanno infettato i nostri sistemi con un trojan che ci costringe ad utilizzare il computer in questa maniera.\n"
@@ -442,7 +442,7 @@ int main() {
             "Sei pronta/o?",
             { "Si", "No", "Ermh... cosa... devo fare?" }
         );
-        /*
+        
         if(risposta==1){}
 
         if (risposta == 2) {
@@ -459,7 +459,7 @@ int main() {
 
         terminal.newLine(2);
 
-        */
+        
         secondoEnigma(terminal, nome);
 
 
@@ -526,8 +526,8 @@ int main() {
                     space_interval = space_interval >= 0 ? space_interval - 1 : 0;
                 }
 
-                clear_probability = std::clamp(clear_probability, 0.0f, 1.0f);
-                spawn_probability = std::clamp(spawn_probability, 0.0f, 1.0f);
+                clear_probability = clamp(clear_probability, 0.0f, 1.0f);
+                spawn_probability = clamp(spawn_probability, 0.0f, 1.0f);
             }
         }
 

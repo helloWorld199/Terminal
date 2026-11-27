@@ -99,18 +99,18 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
     terminal.newLine(2);
 
     terminal.write(
-        "HEX     CARATTERE\n"
-        "------------------\n"
-        "61      a\n"
-        "62      b\n"
-        "63      c\n"
-        "64      d\n"
-        "65      e\n"
-        "66      f\n"
-        "67      g\n"
-        "68      h\n"
-        "69      i\n"
-        "6A      j\n"
+        "HEX     CARATTERE       HEX     CARATTERE\n"
+        "-----------------------------------------\n"
+        "61      a               30      0\n"
+        "62      b               31      1\n"
+        "63      c               32      2\n"
+        "64      d               33      3\n"
+        "65      e               34      4\n"
+        "66      f               35      5\n"
+        "67      g               36      6\n"
+        "68      h               37      7\n"
+        "69      i               38      8\n"
+        "6A      j               39      9\n"
         "6B      k\n"
         "6C      l\n"
         "6D      m\n"
@@ -127,8 +127,8 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
         "78      x\n"
         "79      y\n"
         "7A      z\n",
-        5,
-        25
+        2,
+        15
     );
 
     terminal.newLine(2);
@@ -137,8 +137,8 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
     terminal.newLine(2);
 
     terminal.write(
-        "6F 72 69 65 6E 74 61 6D 65 6E 74 6F "
-        "69 6C 74 61 67 6C 69 61 6D 65 6E 74 6F"
+        "73 63 75 6F 6C 65 61 70 65 72 74 65 "
+        "32 36 32 37"
     );
 
     terminal.newLine(3);
@@ -146,7 +146,7 @@ void testoPrimoEnigma(Terminal& terminal, const string& nome) {
 
 void primoEnigma(Terminal& terminal, const string& nome) {
 
-    string soluzione = "orientamentoaltagliamento";
+    string soluzione = "scuoleaperte2627";
     string tentativo;
 
     testoPrimoEnigma(terminal, nome);
@@ -187,7 +187,6 @@ void primoEnigma(Terminal& terminal, const string& nome) {
 
 void testoSecondoEnigma(Terminal& terminal, const string& nome) {
     terminal.write(
-        "Complimenti, " + nome + "!\n"
         "Abbiamo intercettato un altro messaggio.\n"
         "Questa volta sembra essere stato cifrato con un algoritmo diverso!\n"
     );
@@ -403,70 +402,82 @@ int main() {
     terminal.fullScreen();
 
     terminal.clear();
-    /*
-    terminal.write("Premi INVIO per iniziare");
+    
+    terminal.write("Premi INVIO per iniziare, o skippa ai crediti con E");
 
-    char tasto = _getch();
-    while (tasto != 13) {
+    bool play = true;
+    char tasto;
+    do {
         tasto = _getch();
-    }
+    } while (tasto != 13 && tasto != 'e'); // 13 invio, 27 esc
+
+    if (tasto == 'e')
+        play = false;
 
     terminal.clear();
 
-    terminal.write(
-        "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
-        "Hanno infettato i nostri sistemi con un trojan che ci costringe ad utilizzare il computer in questa maniera.\n"
-        "Schermo nero e caratteri squadrati..."
-    );
+    if (play) {
+        terminal.write(
+            "Siamo appena stati attaccati da un gruppo hacker chiamato hack-a-ton!\n"
+            "Hanno infettato i nostri sistemi con un trojan che ci costringe ad utilizzare il computer in questa maniera.\n"
+            "Schermo nero e caratteri squadrati..."
+        );
 
-    terminal.newLine(2);
+        terminal.newLine(2);
 
-    terminal.write("Come ti chiami?");
-    terminal.newLine(2);
+        terminal.write("Come ti chiami?");
+        terminal.newLine(2);
 
-    terminal.write("> ");
-    getline(cin, nome);
+        terminal.write("> ");
+        getline(cin, nome);
 
-    terminal.newLine(2);
+        terminal.newLine(2);
 
-    
-    terminal.write("Ciao " + nome +"! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi da risolvere per riottenere il controllo \"normale\" del computer.\n"
-                "Ti consigliamo di avere sotto mano carta e penna, ti serviranno!");
-    
-    terminal.newLine(2);
 
-    int risposta = domanda(
-        terminal,
-        nome,
-        "Sei pronta/o?",
-        { "Si", "No", "Ermh... cosa... devo fare?" }
-    );
+        terminal.write("Ciao " + nome + "! \nIl gruppo hacker hack - a - ton ha richiesto che vengano risolti due rompicapi da risolvere per riottenere il controllo \"normale\" del computer.\n"
+            "Ti consigliamo di avere sotto mano carta e penna, ti serviranno!");
 
-    if (risposta == 2) {
-        terminal.newLine();
-        terminal.write("non hai capito n cazz");
+        terminal.newLine(2);
+
+        int risposta = domanda(
+            terminal,
+            nome,
+            "Sei pronta/o?",
+            { "Si", "No", "Ermh... cosa... devo fare?" }
+        );
+
+        /*
+        if (risposta == 1) {
+
+        }
+
+        if (risposta == 2) {
+            terminal.newLine();
+            terminal.write("Solo provare a rispondere ad un paio di domande");
+        }
+        */
+
+        primoEnigma(terminal, nome);
+
+        terminal.write("Complimenti " + nome + "!\n"
+            "Hai risolto il primo enigma, pasiamo al secondo!"
+        );
+
+        terminal.newLine(2);
+
+        secondoEnigma(terminal, nome);
+
+
+        terminal.write("Grande " + nome + "\nHai risolto anche il secondo enigma!\n"
+            "Grazie al tuo aiuto siamo riusciti a recuperare il computer!\n"
+            "Ora rilassati e goditi questa animazione in stile Matrix, ciao!\n"
+        );
+
+        std::this_thread::sleep_for(std::chrono::seconds(2));
     }
-
-
-    primoEnigma(terminal, nome);
-
-    terminal.write("Complimenti " + nome + "!\n"
-        "Hai risolto il primo enigma, pasiamo al secondo!"
-    );
-
-    terminal.newLine(2);
-
-    secondoEnigma(terminal, nome);
     
-
-    terminal.write("Grande " + nome + "\nHai risolto anche il secondo enigma! " + nome + "!\n"
-        "Grazie al tuo aiuto siamo riusciti a recuperare il computer!\n"
-        "Ora rilassati e goditi questa animazione in stile Matrix, ciao!\n"
-    );
-
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-
-    */
+    // Credits
+    
     float clear_probability = 0.8f;
     float spawn_probability = 0.2f;
     int space_interval = 1;
